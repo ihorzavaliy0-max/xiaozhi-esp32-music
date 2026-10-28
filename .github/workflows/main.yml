@@ -6,22 +6,20 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    container:
+      image: espressif/idf:release-v5.2
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
           submodules: 'recursive'
 
-      - name: Build with ESP-IDF
-        uses: espressif/esp-idf-ci-action@v1
-        with:
-          esp_idf_version: 'v5.2.2'
-          target: 'esp32s3'
-          command: |
-            idf.py set-target esp32s3
-            idf.py -D BOARD_TYPE=freenove-esp32s3-display-2.8-lcd build
-            cd build
-            esptool.py --chip esp32s3 merge_bin -o merged-binary.bin @flash_args
+      - name: Build firmware
+        run: |
+          . $IDF_PATH/export.sh
+          idf.py set-target esp32s3
+          idf.py -D BOARD_TYPE=freenove-esp32s3-display-2.8-lcd build
+          idf.py merge-bin -o merged-binary.bin
 
       - name: Upload firmware artifact
         uses: actions/upload-artifact@v4
