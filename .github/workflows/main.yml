@@ -18,7 +18,7 @@ jobs:
         run: |
           . $IDF_PATH/export.sh
           idf.py set-target esp32s3
-          idf.py -D BOARD_TYPE=bread-compact-wifi-lcd build
+          idf.py -D BOARD_TYPE=freenove-esp32s3-display-2.8-lcd build
           idf.py merge-bin -o merged-binary.bin
 
       - name: Upload firmware artifact
